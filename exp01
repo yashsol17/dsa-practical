@@ -1,0 +1,97 @@
+/*Consider a student database of SEIT class (at least 15 records). Database contains
+different fields of every student like Roll No, Name and SGPA.(array of structure)
+a) Design a roll call list, arrange list of students according to roll numbers in
+ascending order (Use Bubble Sort)
+b) Arrange a list of students alphabetically. (Use Insertion sort)
+c)Search a particular student according to name using binary search
+*/
+
+
+
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    int roll_no;
+    string name;
+    float sgpa;
+};
+
+void bubbleSortByRollNo(Student arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j].roll_no > arr[j + 1].roll_no) {
+                Student temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void insertionSortByName(Student arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        Student key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j].name > key.name) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+int binarySearchByName(Student arr[], int n, string name) {
+    int low = 0, high = n - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid].name == name) {
+            return mid;
+        } else if (arr[mid].name < name) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return -1;
+}
+
+void displayStudents(Student arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << "Roll No: " << arr[i].roll_no << ", Name: " << arr[i].name << ", SGPA: " << arr[i].sgpa << endl;
+    }
+}
+
+int main() {
+    int n = 15;
+    Student students[n] = {
+        {101, "alex", 8.5}, {102, "Bob", 9.1}, {103, "abc", 7.4}, {104, "david", 8.9}, {105, "xyz", 7.8},
+        {106, "max", 9.0}, {107, "george", 6.9}, {108, "blue", 8.0}, {109, "red", 8.7}, {110, "black", 7.2},
+        {111, "stan", 8.1}, {112, "leo", 7.9}, {113, "mia", 8.6}, {114, "mark", 8.2}, {115, "speed", 9.3}
+    };
+
+    bubbleSortByRollNo(students, n);
+    cout << "Students sorted by Roll No:\n";
+    displayStudents(students, n);
+
+    insertionSortByName(students, n);
+    cout << "\nStudents sorted by Name:\n";
+    displayStudents(students, n);
+
+    string searchName;
+    cout << "\nEnter the name of the student to search: ";
+    cin >> searchName;
+
+    int result = binarySearchByName(students, n, searchName);
+    if (result != -1) {
+        cout << "Student found: Roll No: " << students[result].roll_no << ", Name: " << students[result].name << ", SGPA: " << students[result].sgpa << endl;
+    } else {
+        cout << "Student not found.\n";
+    }
+
+    return 0;
+}
